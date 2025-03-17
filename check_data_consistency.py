@@ -1625,7 +1625,7 @@ class DataConsistencyChecker:
                 return
             d = pd.DataFrame(matrix, columns=self.numeric_cols[:max_features_shown],
                              index=self.numeric_cols[:max_features_shown])
-            d = d.replace(0, np.NaN)
+            d = d.replace(0, np.nan)
             num_feats = min(len(self.numeric_cols), max_features_shown)
             fig, ax = plt.subplots(figsize=(num_feats, num_feats))
             s = sns.heatmap(d, annot=True, fmt='.4f', cmap="seismic", linewidths=1.1, linecolor='blue', cbar=False)
@@ -5958,7 +5958,7 @@ class DataConsistencyChecker:
         self.__add_synthetic_column('missing vals all',
             [random.choice(['a', 'b', 'c']) for _ in range(self.num_synth_rows)])
         self.__add_synthetic_column('missing vals most',
-            [random.choice(['a', 'b', 'c']) for _ in range(self.num_synth_rows-2)] + [None] + [np.NaN])
+            [random.choice(['a', 'b', 'c']) for _ in range(self.num_synth_rows-2)] + [None] + [np.nan])
         self.__add_synthetic_column('missing vals most null',
             [None] * (self.num_synth_rows-1) + ['a'])
 
@@ -6229,8 +6229,8 @@ class DataConsistencyChecker:
                 # Test simply predicting the previous value
                 y_train_numeric = y_train_numeric.fillna(y_train_numeric.mode())
                 y_lag_1_numeric = y_lag_1_numeric.fillna(y_lag_1_numeric.mode())
-                y_train_numeric = y_train_numeric.replace([np.inf, -np.inf, None, np.NaN, pd.NaT], y_train_numeric.mode()[0])
-                y_lag_1_numeric = y_lag_1_numeric.replace([np.inf, -np.inf, None, np.NaN, pd.NaT], y_lag_1_numeric.mode()[0])
+                y_train_numeric = y_train_numeric.replace([np.inf, -np.inf, None, np.nan, pd.NaT], y_train_numeric.mode()[0])
+                y_lag_1_numeric = y_lag_1_numeric.replace([np.inf, -np.inf, None, np.nan, pd.NaT], y_lag_1_numeric.mode()[0])
                 f1_naive = f1_score(y_train_numeric, y_lag_1_numeric, average='micro')
                 if f1_naive >= (f1 - 0.05):
                     continue
@@ -6750,8 +6750,8 @@ class DataConsistencyChecker:
             if same_indicator.count(True) > (len(arr1) * 0.95):
                 return False
 
-            other_values_1 = pd.Series([np.NaN if y == 1 else x for x, y in zip(arr1, same_indicator)])
-            other_values_2 = pd.Series([np.NaN if y == 1 else x for x, y in zip(arr2, same_indicator)])
+            other_values_1 = pd.Series([np.nan if y == 1 else x for x, y in zip(arr1, same_indicator)])
+            other_values_2 = pd.Series([np.nan if y == 1 else x for x, y in zip(arr2, same_indicator)])
             vc_1 = other_values_1.value_counts()
             vc_2 = other_values_2.value_counts()
             if (len(vc_1) <= 5) and (arr1.nunique() >= 10):
@@ -8683,7 +8683,7 @@ class DataConsistencyChecker:
             vals_arr_1 = self.numeric_vals_filled[col_name_1]
             vals_arr_2 = self.numeric_vals_filled[col_name_2]
             diffs_series = abs(vals_arr_1 - vals_arr_2)
-            diffs_series = diffs_series.replace([np.inf, -np.inf, np.NaN], diffs_series.median())
+            diffs_series = diffs_series.replace([np.inf, -np.inf, np.nan], diffs_series.median())
             nmad = scipy.stats.median_abs_deviation(diffs_series) / statistics.median(diffs_series)\
                 if statistics.median(diffs_series) != 0 \
                 else 0.0
@@ -9580,13 +9580,13 @@ class DataConsistencyChecker:
         self.__add_synthetic_column('matched zero miss rand_a', [random.randint(0, 10) for _ in range(self.num_synth_rows)])
         self.__add_synthetic_column('matched zero miss rand_b', [random.randint(0, 10) for _ in range(self.num_synth_rows)])
         self.__add_synthetic_column('matched zero miss all', self.synth_df['matched zero miss rand_a'])
-        self.synth_df['matched zero miss all'] = self.synth_df['matched zero miss all'].replace(0, np.NaN)
+        self.synth_df['matched zero miss all'] = self.synth_df['matched zero miss all'].replace(0, np.nan)
         self.__add_synthetic_column('matched zero miss most', self.synth_df['matched zero miss rand_a'])
-        self.synth_df['matched zero miss most'] = self.synth_df['matched zero miss most'].replace(0, np.NaN)
-        if self.synth_df.loc[999, 'matched zero miss most'] == np.NaN:
+        self.synth_df['matched zero miss most'] = self.synth_df['matched zero miss most'].replace(0, np.nan)
+        if self.synth_df.loc[999, 'matched zero miss most'] == np.nan:
             self.synth_df.loc[999, 'matched zero miss most'] = 1
         else:
-            self.synth_df.loc[999, 'matched zero miss most'] = np.NaN
+            self.synth_df.loc[999, 'matched zero miss most'] = np.nan
 
     def __check_matched_zero_missing(self, test_id):
         """
@@ -9719,7 +9719,7 @@ class DataConsistencyChecker:
                     (self.sample_numeric_vals_filled[col_name_1] - self.sample_numeric_vals_filled[col_name_2]))
                 if test_series_a.isna().sum() > (self.num_rows * 0.75):
                     continue
-                test_series_a = test_series_a.replace(np.NaN, 1.0)
+                test_series_a = test_series_a.replace(np.nan, 1.0)
                 test_series = np.where((test_series_a > 0.9) & (test_series_a < 1.1), True, False)
                 num_not_matching = test_series.tolist().count(False)
                 if num_not_matching > 1:
@@ -9733,7 +9733,7 @@ class DataConsistencyChecker:
                 # Test on the full data
                 test_series_a = (self.numeric_vals_filled[col_name_3] / \
                                     (self.numeric_vals_filled[col_name_1] - self.numeric_vals_filled[col_name_2]))
-                test_series_a = test_series_a.replace(np.NaN, 1.0)
+                test_series_a = test_series_a.replace(np.nan, 1.0)
                 test_series = np.where((test_series_a > 0.9) & (test_series_a < 1.1), True, False)
                 num_matching = test_series.tolist().count(True)
                 if num_matching < (self.num_rows - self.freq_contamination_level):
@@ -9817,7 +9817,7 @@ class DataConsistencyChecker:
                             (self.sample_numeric_vals_filled[col_name_1] * self.sample_numeric_vals_filled[col_name_2])
             if test_series_a.isna().sum() > (self.num_rows * 0.75):
                 continue
-            test_series_a = test_series_a.replace(np.NaN, 1.0)
+            test_series_a = test_series_a.replace(np.nan, 1.0)
             test_series = np.where((test_series_a > 0.9) & (test_series_a < 1.1), True, False)
             num_not_matching = test_series.tolist().count(False)
             if num_not_matching > 1:
@@ -9833,7 +9833,7 @@ class DataConsistencyChecker:
                 continue
 
             # We fill the null values to allow null values to not violate the pattern.
-            test_series_a = test_series_a.replace(np.NaN, 1.0)
+            test_series_a = test_series_a.replace(np.nan, 1.0)
             test_series = np.where((test_series_a > 0.9) & (test_series_a < 1.1), True, False)
             num_matching = test_series.tolist().count(True)
             if num_matching >= (self.num_rows - self.freq_contamination_level):
@@ -11104,10 +11104,10 @@ class DataConsistencyChecker:
             if len(categorical_features) > 0:
                 x_data = pd.get_dummies(x_data, columns=categorical_features)
             for c in x_data.columns:
-                x_data[c] = x_data[c].replace([np.inf, -np.inf, np.NaN], x_data[c].median())
+                x_data[c] = x_data[c].replace([np.inf, -np.inf, np.nan], x_data[c].median())
 
             y = self.numeric_vals_filled[col_name]
-            y = y.replace([np.inf, -np.inf, np.NaN], y.median())
+            y = y.replace([np.inf, -np.inf, np.nan], y.median())
 
             # Remove the extreme values from y to make the predictor less fit to outliers
             upper_y = y.quantile(0.99)
@@ -14736,11 +14736,11 @@ class DataConsistencyChecker:
             # Identify the common special characters which appear in a consistent location
             for c in common_special_chars_list:
                 # Get the position of the character from the beginning of the strings
-                list_1 = pd.Series(self.orig_df[col_name].astype(str).str.find(c)).replace(-1, np.NaN)
+                list_1 = pd.Series(self.orig_df[col_name].astype(str).str.find(c)).replace(-1, np.nan)
                 # Get the position of the character from the end of the strings
                 list_2 = pd.Series([x - y if y >= 0 else -1 for x, y in
                                     zip(self.orig_df[col_name].fillna("").astype(str).str.len() ,
-                                        self.orig_df[col_name].fillna("").astype(str).str.rfind(c))]).replace(-1, np.NaN)
+                                        self.orig_df[col_name].fillna("").astype(str).str.rfind(c))]).replace(-1, np.nan)
                 vc1 = list_1.value_counts()
                 vc2 = list_2.value_counts()
                 if (self.orig_df[col_name].isna().sum() + vc1.iloc[0]) >= (self.num_rows - self.freq_contamination_level):
@@ -17943,11 +17943,11 @@ class DataConsistencyChecker:
             x_data = pd.get_dummies(x_data, columns=use_categorical_features)
             for c in self.orig_df.columns:
                 if c in x_data.columns:
-                    x_data[c] = x_data[c].replace([np.inf, -np.inf, np.NaN], self.orig_df[c].median())
+                    x_data[c] = x_data[c].replace([np.inf, -np.inf, np.nan], self.orig_df[c].median())
 
             # Ensure the target column is clean
             y = self.orig_df[col_name]
-            y = y.replace([np.inf, -np.inf, np.NaN], statistics.mode(y))
+            y = y.replace([np.inf, -np.inf, np.nan], statistics.mode(y))
             y = y.astype(str)
 
             # Fit a model, get the predictions, and the accuracy
@@ -18954,7 +18954,7 @@ def replace_special_with_space(x):
 
     if x is None:
         return ""
-    if x in [np.inf, -np.inf, np.NaN]:
+    if x in [np.inf, -np.inf, np.nan]:
         return ""
     return ''.join([c if ((c in string.ascii_letters) or (c in string.digits)) else " " for c in x])
 
