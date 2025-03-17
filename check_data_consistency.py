@@ -8,7 +8,7 @@ from sklearn.linear_model import Lasso
 from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
 from sklearn import tree
 from sklearn.metrics import f1_score, r2_score
-from sklearn.preprocessing import MinMaxScaler, RobustScaler
+from sklearn.preprocessing import RobustScaler
 import copy
 import math
 import statistics
@@ -22,15 +22,13 @@ import string
 import scipy
 from itertools import combinations
 from IPython import get_ipython
-from IPython.display import display, Markdown, HTML
+from IPython.display import display, Markdown
 from textwrap import wrap
 try:
     from termcolor import colored
 except:
     colored = None
 import concurrent
-from decimal import Decimal, ROUND_HALF_UP
-from multiprocessing import Process, Queue
 
 # Visualization
 import matplotlib.pyplot as plt
